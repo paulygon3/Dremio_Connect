@@ -1,0 +1,28 @@
+{
+  // Dremio_To_Excel development container.
+  //
+  // Why the universal image rather than a slim python one: 22 of the 29 repro
+  // scripts build a real Tk application, so the interpreter MUST have _tkinter
+  // linked against Tk. This image's Python does (verified: _tkinter loads from
+  // ~/.python/current, TkVersion 8.6, tk8.6-dev present, and a full suite run
+  // passes on it). A devcontainers/python image may or may not - it depends how
+  // that image's Python was built - and an unverified swap would break 22
+  // scripts with ModuleNotFoundError: No module named '_tkinter'.
+  //
+  // The Python version is therefore pinned by CHECKING rather than by choosing:
+  // setup.sh reports loudly if it is not the 3.12.x that requirements.txt was
+  // verified against, because the exact pins there may have no wheel on another
+  // minor version. See the note at the top of dremio_Tool/requirements.txt.
+  "name": "Dremio_To_Excel",
+  "image": "mcr.microsoft.com/devcontainers/universal:2-linux",
+
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python"
+      ]
+    }
+  }
+}

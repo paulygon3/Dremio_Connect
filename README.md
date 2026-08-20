@@ -1,2 +1,2 @@
-# Dremio_Connect
-This is an improved branch of the original, but also has the skill added.
+# Dremio_To_Excel
+This is the working version of a Dremio_To_Excel tool

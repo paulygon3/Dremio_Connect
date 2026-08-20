@@ -1,0 +1,36 @@
+__pycache__/
+*.py[cod]
+
+# User state written at runtime — never commit
+.credentials
+config.json
+query_history.json
+
+# Export artifacts
+*.xlsx
+tmp*/
+
+# Virtual environments (the skill ships a ~218 MB pinned .venv — never commit)
+.venv/
+venv/
+env/
+ENV/
+
+# Local engine/runtime state (normally under %APPDATA%; ignored defensively)
+credsets.json
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+.env
+saved_queries/
+
+# Export sidecars written next to a workbook
+*.truncated.txt
+*.manifest.json
+
+# Tooling / machine-local
+.claude/
+.pytest_cache/
+*.egg-info/
+dist/
+build/

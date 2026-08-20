@@ -1,0 +1,53 @@
+# Dremio to Excel Exporter - Dependencies
+# Install with: pip install -r requirements.txt
+#
+# ---------------------------------------------------------------------------
+# Why these are pinned exactly (F-32)
+# ---------------------------------------------------------------------------
+# Every floor here used to be an unbounded `>=`, with no upper bound, no
+# lockfile and no CI. That is not a small untidiness: it means the versions the
+# audit and the remediation repros were verified against were simply whatever
+# `pip install` produced on the day, and two people installing months apart get
+# materially different runtimes with nothing to detect the difference.
+#
+# The drift was not hypothetical. The floors say pandas>=1.5.0 and
+# pyarrow>=10.0.0; a fresh install resolves to pandas 3.0.5 and pyarrow 25.0.1 -
+# both several major versions on, across documented breaking changes (pandas
+# 2.0's Arrow-backed dtypes, 3.0's copy-on-write and string-dtype defaults,
+# pyarrow's FlightStreamReader API churn). During the audit, reading a corrupt
+# workbook raised `OptionError: No such keys(s): 'io.excel.zip.reader'` - a
+# pandas 3.0 internal path that does not exist at the stated 1.5.0 floor.
+#
+# So these are exact pins rather than ranges. This is an application, not a
+# library: nothing depends on it, so there is no downstream resolver to leave
+# room for, and reproducibility is worth more than flexibility. These are the
+# versions the whole repro suite in dremio_Tool/tests/ passes against - the
+# pins are what make those results mean anything later.
+#
+# To move a pin: change it, run `python dremio_Tool/tests/run_all.py`, and check
+# the summary still reports the same findings. Do not bump them silently.
+#
+# Verified against Python 3.12.1 on Linux.
+# ---------------------------------------------------------------------------
+
+# Core dependencies - the app does not start without these
+pandas==3.0.5
+pyarrow==25.0.1
+openpyxl==3.1.5
+
+# Arrives with pandas either way, but app.py imports it directly since F-08:
+# _excel_value has to recognise numpy scalars by type before handing them to
+# openpyxl. An undeclared direct import is exactly the kind of thing that keeps
+# working until the day it does not.
+numpy==2.5.2
+
+# Optional - logo image support. utils.load_logo_image guards the import and
+# falls back to a text logo, so a missing Pillow degrades rather than breaks.
+Pillow==12.3.0
+
+# Optional - credential storage. config.py guards the import and sets
+# KEYRING_AVAILABLE=False without it. Note that installing keyring is not the
+# same as having a working backend: on Linux it commonly resolves to
+# keyring.backends.fail.Keyring, which is why the base64 file fallback is the
+# live path there rather than a rarely-taken branch (F-28).
+keyring==25.7.0

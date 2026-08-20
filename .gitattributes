@@ -1,0 +1,10 @@
+# Normalise line endings: store text as LF in the repo
+* text=auto eol=lf
+
+# Shell scripts must stay LF — they run in the Linux devcontainer
+*.sh text eol=lf
+
+# Binary assets (never line-ending-converted or diffed)
+*.png binary
+*.ico binary
+*.xlsx binary

@@ -1,0 +1,13 @@
+# Dependencies for the dremio-excel skill engine.
+# Install into an ISOLATED venv dedicated to this skill:
+#   python -m venv .venv && .venv\Scripts\pip install -r requirements.txt
+#
+# Pinned exactly. These are the versions the engine is tested against; the
+# desktop tool's own pins drift from what is installed globally on this machine,
+# which is exactly why the skill ships its own locked set.
+
+pandas==2.2.3
+pyarrow==22.0.0
+openpyxl==3.1.5
+numpy==2.2.0
+keyring==25.7.0
